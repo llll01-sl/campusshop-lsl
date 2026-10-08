@@ -25,8 +25,10 @@ public class OrderService {
 
         inv.deduct(o.productId(), o.quantity());
 
-        if (!pay.charge(o.userId(), o.total()))
+        if (!pay.charge(o.userId(), o.total())) {
+            inv.restore(o.productId(), o.quantity());
             return new OrderResult(OrderStatus.PAYMENT_FAILED, null, "支付失败");
+        }
 
         String orderId = String.valueOf(NEXT_ORDER_ID.incrementAndGet());
         try {
