@@ -1,0 +1,32 @@
+### CampusShop API 手动调用示例
+### 用 VS Code 的 REST Client 插件打开本文件，点击请求上方的 “Send Request”。
+### C# 版地址 http://localhost:5000 ；Java 版改为 http://localhost:8080
+
+@host = http://localhost:5000
+
+# @name login
+POST {{host}}/api/auth/login
+Content-Type: application/json
+
+{ "username": "alice", "password": "123456" }
+
+###
+# 带 Token 查询订单
+GET {{host}}/api/orders/1001
+Authorization: Bearer {{login.response.body.token}}
+
+###
+# 不带 Token，应返回 401
+GET {{host}}/api/orders/1001
+
+###
+# 商品列表（不需要 Token）
+GET {{host}}/api/products
+
+###
+# 直接下单：笔记本 × 2
+POST {{host}}/api/orders
+Content-Type: application/json
+Authorization: Bearer {{login.response.body.token}}
+
+{ "productId": "p1", "quantity": 2 }
