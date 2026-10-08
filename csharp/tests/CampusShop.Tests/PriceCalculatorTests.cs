@@ -117,4 +117,22 @@ public class PriceCalculatorTests
 
         Assert.Equal(90m, result);
     }
+
+    // ---- 第 8 周：针对存活的变异体补充的测试 ----
+
+    [Theory]
+    [InlineData(0,      MemberLevel.Normal, 0.00)]     // 需求 2.1：0 是合法下限（杀死 < → <=）
+    [InlineData(100000, MemberLevel.Normal, 99970.00)] // 需求 2.1：100000 是合法上限（杀死 > → >=）
+    [InlineData(133.33, MemberLevel.Silver, 116.66)]   // 需求 2.2：133.33×0.95=126.6635→126.66→减10→116.66
+    [InlineData(150,    MemberLevel.Gold,   125.00)]   // 需求 2.2：150×0.9=135→减10→125
+    [InlineData(10.10,  MemberLevel.Silver, 9.60)]     // 需求 2.2：10.10×0.95=9.595→四舍五入→9.60
+    public void CalculateTotal_BoundaryAndRounding_ReturnsExpected(
+        double total, MemberLevel level, double expected)
+    {
+        var calc = new PriceCalculator();
+
+        var result = calc.CalculateTotal((decimal)total, level);
+
+        Assert.Equal((decimal)expected, result);
+    }
 }

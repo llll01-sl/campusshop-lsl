@@ -26,7 +26,7 @@ public class PriceCalculator
         if (total < 0 || total > 100000)
             throw new ArgumentOutOfRangeException(nameof(total));
 
-        decimal discounted = (decimal)Math.Round((double)total * Rate(level), 2, MidpointRounding.AwayFromZero);
+        decimal discounted = Math.Round(total * Rate(level), 2, MidpointRounding.AwayFromZero);
         if (discounted >= 200)
             return discounted - 30;
         if (discounted >= 100)
@@ -34,10 +34,10 @@ public class PriceCalculator
         return discounted;
     }
 
-    private static double Rate(MemberLevel level) => level switch
+    private static decimal Rate(MemberLevel level) => level switch
     {
-        MemberLevel.Silver => 0.95,
-        MemberLevel.Gold => 0.9,
-        _ => 1.0,
+        MemberLevel.Silver => 0.95m,
+        MemberLevel.Gold => 0.9m,
+        _ => 1m,
     };
 }

@@ -115,4 +115,22 @@ class PriceCalculatorTest {
 
         assertEquals(0, new BigDecimal("90").compareTo(result));
     }
+
+    // ---- 第 8 周：针对存活的变异体补充的测试 ----
+
+    @ParameterizedTest
+    @CsvSource({
+            "0,      NORMAL, 0.00",      // 需求 2.1：0 是合法下限（杀死 < → <=）
+            "100000, NORMAL, 99970.00",  // 需求 2.1：100000 是合法上限（杀死 > → >=）
+            "133.33, SILVER, 116.66",    // 需求 2.2：133.33×0.95=126.6635→126.66→减10→116.66
+            "150,    GOLD,   125.00",    // 需求 2.2：150×0.9=135→减10→125
+            "10.10,  SILVER, 9.60"       // 需求 2.2：10.10×0.95=9.595→四舍五入→9.60
+    })
+    void calculateTotal_boundaryAndRounding_returnsExpected(BigDecimal total, MemberLevel level, BigDecimal expected) {
+        PriceCalculator calc = new PriceCalculator();
+
+        BigDecimal result = calc.calculateTotal(total, level);
+
+        assertEquals(0, expected.compareTo(result), () -> "expected " + expected + " but was " + result);
+    }
 }
