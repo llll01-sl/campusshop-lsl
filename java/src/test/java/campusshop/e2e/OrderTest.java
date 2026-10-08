@@ -2,22 +2,18 @@ package campusshop.e2e;
 
 import com.microsoft.playwright.Locator;
 import com.microsoft.playwright.Page;
-import com.microsoft.playwright.junit.UsePlaywright;
 import com.microsoft.playwright.options.AriaRole;
-import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 
 import java.util.regex.Pattern;
 
 import static com.microsoft.playwright.assertions.PlaywrightAssertions.assertThat;
 
-@Tag("e2e")
-@UsePlaywright
-class OrderTest {
+class OrderTest extends E2ETest {
 
     @Test
     void order_twoNotebooks_showsOrderNumber(Page page) {
-        Shop.loginAs(page, "alice");
+        loginAs(page, "alice");
         Locator row = page.getByRole(AriaRole.ROW,
             new Page.GetByRoleOptions().setName("笔记本"));
         row.getByLabel("数量").fill("2");
@@ -36,7 +32,7 @@ class OrderTest {
 
     @Test
     void cart_empty_orderButtonDisabled(Page page) {
-        Shop.loginAs(page, "bob");   // bob 的购物车为空
+        loginAs(page, "bob");   // bob 的购物车为空
         page.getByRole(AriaRole.LINK,
             new Page.GetByRoleOptions().setName("购物车")).click();
 
