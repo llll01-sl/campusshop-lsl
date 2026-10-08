@@ -1,9 +1,10 @@
 namespace CampusShop;
 
-/// <summary>支付网关：扣款成功返回 true。</summary>
+/// <summary>支付网关：扣款、退款成功返回 true。</summary>
 public interface IPaymentGateway
 {
     bool Charge(string userId, decimal amount);
+    bool Refund(string userId, decimal amount);
 }
 
 /// <summary>库存仓库。</summary>

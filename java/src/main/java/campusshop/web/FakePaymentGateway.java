@@ -15,4 +15,9 @@ public class FakePaymentGateway implements PaymentGateway {
     public boolean charge(String userId, BigDecimal amount) {
         return amount.compareTo(LIMIT) <= 0;
     }
+
+    @Override
+    public boolean refund(String userId, BigDecimal amount) {
+        return true;
+    }
 }

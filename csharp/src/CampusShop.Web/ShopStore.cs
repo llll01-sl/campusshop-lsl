@@ -114,6 +114,7 @@ public class FakePaymentGateway : IPaymentGateway
 {
     public const decimal Limit = 5000m;
     public bool Charge(string userId, decimal amount) => amount <= Limit;
+    public bool Refund(string userId, decimal amount) => true;
 }
 
 /// <summary>模拟通知：输出到控制台。</summary>
