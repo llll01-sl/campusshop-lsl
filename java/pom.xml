@@ -66,6 +66,29 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- 变异测试：.\mvnw test-compile org.pitest:pitest-maven:mutationCoverage
+                 报告：target/pit-reports/index.html -->
+            <plugin>
+                <groupId>org.pitest</groupId>
+                <artifactId>pitest-maven</artifactId>
+                <version>1.30.0</version>
+                <dependencies>
+                    <dependency>
+                        <groupId>org.pitest</groupId>
+                        <artifactId>pitest-junit5-plugin</artifactId>
+                        <version>1.2.3</version>
+                    </dependency>
+                </dependencies>
+                <configuration>
+                    <targetClasses>
+                        <param>campusshop.PriceCalculator</param>
+                    </targetClasses>
+                    <targetTests>
+                        <param>campusshop.*</param>
+                    </targetTests>
+                    <timestampedReports>false</timestampedReports>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 </project>
