@@ -20,7 +20,20 @@
     <properties>
         <java.version>21</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <surefire.excludedGroups>e2e</surefire.excludedGroups>
+        <surefire.groups></surefire.groups>
     </properties>
+
+    <profiles>
+        <!-- .\mvnw test -Pe2e：只运行 E2E 测试（需要先启动网站） -->
+        <profile>
+            <id>e2e</id>
+            <properties>
+                <surefire.excludedGroups></surefire.excludedGroups>
+                <surefire.groups>e2e</surefire.groups>
+            </properties>
+        </profile>
+    </profiles>
 
     <dependencies>
         <dependency>
@@ -47,6 +60,12 @@
             <artifactId>rest-assured</artifactId>
             <scope>test</scope>
         </dependency>
+        <dependency>
+            <groupId>com.microsoft.playwright</groupId>
+            <artifactId>playwright</artifactId>
+            <version>1.63.0</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -54,6 +73,25 @@
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>
+            </plugin>
+            <!-- 默认不运行 E2E 测试（标记为 @Tag("e2e")）；运行 E2E 用 .\mvnw test -Pe2e -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-surefire-plugin</artifactId>
+                <configuration>
+                    <excludedGroups>${surefire.excludedGroups}</excludedGroups>
+                    <groups>${surefire.groups}</groups>
+                </configuration>
+            </plugin>
+            <!-- 运行 Playwright 命令行工具（录制、查看 Trace），例如：
+                 .\mvnw exec:java -e -D exec.mainClass=com.microsoft.playwright.CLI -D exec.args="codegen http://localhost:8080" -->
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>exec-maven-plugin</artifactId>
+                <version>3.6.3</version>
+                <configuration>
+                    <classpathScope>test</classpathScope>
+                </configuration>
             </plugin>
             <!-- 覆盖率：.\mvnw test 后打开 target/site/jacoco/index.html -->
             <plugin>
@@ -92,6 +130,9 @@
                         <param>campusshop.*</param>
                     </targetTests>
                     <timestampedReports>false</timestampedReports>
+                    <excludedGroups>
+                        <param>e2e</param>
+                    </excludedGroups>
                 </configuration>
             </plugin>
         </plugins>

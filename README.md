@@ -50,6 +50,28 @@ cd java
 
 网站的数据保存在内存中，**重启网站后恢复为初始数据**。
 
+## E2E 测试（第 10 周起）
+
+E2E 测试用浏览器操作网页，**运行前要先在另一个终端启动网站**。
+
+**C# 版**：
+
+```powershell
+cd csharp/tests/CampusShop.E2E
+dotnet build
+powershell -ExecutionPolicy Bypass -File bin/Debug/net10.0/playwright.ps1 install chromium   # 只需一次
+dotnet test
+```
+
+**Java 版**（第一次运行会自动下载浏览器）：
+
+```powershell
+cd java
+.\mvnw test -Pe2e
+```
+
+平时运行 `dotnet test`（在 csharp 目录）或 `.\mvnw test` 时，不会运行 E2E 测试。
+
 ## 分支约定
 
 每周有两个分支：
