@@ -1,6 +1,8 @@
 package campusshop;
 
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvSource;
 
 import java.math.BigDecimal;
 
@@ -60,5 +62,19 @@ class PriceCalculatorTest {
         BigDecimal result = calc.applyDiscount(new BigDecimal("180"));
 
         assertEquals(0, new BigDecimal("170").compareTo(result));
+    }
+
+    @ParameterizedTest
+    @CsvSource({
+            "200,    170",    // 正好 200：减 30
+            "250,    220",
+            "199.99, 189.99"  // 不足 200：仍按满 100 减 10
+    })
+    void applyDiscount_tier200_minus30(BigDecimal total, BigDecimal expected) {
+        PriceCalculator calc = new PriceCalculator();
+
+        BigDecimal result = calc.applyDiscount(total);
+
+        assertEquals(0, expected.compareTo(result));
     }
 }

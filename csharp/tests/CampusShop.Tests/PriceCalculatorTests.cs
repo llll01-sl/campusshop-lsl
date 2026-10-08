@@ -61,4 +61,18 @@ public class PriceCalculatorTests
 
         Assert.Equal(170m, result);
     }
+
+    [Theory]
+    [InlineData(200, 170)]       // 正好 200：减 30
+    [InlineData(250, 220)]
+    [InlineData(199.99, 189.99)] // 不足 200：仍按满 100 减 10
+    public void ApplyDiscount_Tier200_Minus30(
+        decimal total, decimal expected)
+    {
+        var calc = new PriceCalculator();
+
+        var result = calc.ApplyDiscount(total);
+
+        Assert.Equal(expected, result);
+    }
 }
