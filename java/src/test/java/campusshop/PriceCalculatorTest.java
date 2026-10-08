@@ -7,6 +7,7 @@ import org.junit.jupiter.params.provider.CsvSource;
 import java.math.BigDecimal;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 class PriceCalculatorTest {
 
@@ -76,5 +77,42 @@ class PriceCalculatorTest {
         BigDecimal result = calc.applyDiscount(total);
 
         assertEquals(0, expected.compareTo(result));
+    }
+
+    // ---- calculateTotal：需求第 2 节 ----
+
+    @ParameterizedTest
+    @CsvSource({
+            "99.99,  NORMAL, 99.99",    // 边界 100 左
+            "100,    NORMAL, 90.00",    // 边界 100
+            "200,    NORMAL, 170.00",   // 边界 200
+            "200,    GOLD,   170.00",   // 交互：200 × 0.9 = 180 → 减 10
+            "110,    SILVER, 94.50",    // 交互：110 × 0.95 = 104.5 → 减 10
+            "105,    SILVER, 99.75"     // 交互：105 × 0.95 = 99.75，跌破门槛
+    })
+    void calculateTotal_validInput_returnsExpected(BigDecimal total, MemberLevel level, BigDecimal expected) {
+        PriceCalculator calc = new PriceCalculator();
+
+        BigDecimal result = calc.calculateTotal(total, level);
+
+        assertEquals(0, expected.compareTo(result), () -> "expected " + expected + " but was " + result);
+    }
+
+    @ParameterizedTest
+    @CsvSource({"-0.01", "100000.01"})
+    void calculateTotal_outOfRange_throws(BigDecimal total) {
+        PriceCalculator calc = new PriceCalculator();
+
+        assertThrows(IllegalArgumentException.class,
+                () -> calc.calculateTotal(total, MemberLevel.NORMAL));
+    }
+
+    @Test
+    void applyDiscount_totalIs100_returns90() {
+        PriceCalculator calc = new PriceCalculator();
+
+        BigDecimal result = calc.applyDiscount(new BigDecimal("100"));
+
+        assertEquals(0, new BigDecimal("90").compareTo(result));
     }
 }

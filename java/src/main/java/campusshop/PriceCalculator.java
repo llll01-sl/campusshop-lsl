@@ -14,7 +14,7 @@ public class PriceCalculator {
     public BigDecimal applyDiscount(BigDecimal total) {
         if (total.compareTo(new BigDecimal("200")) >= 0)
             return total.subtract(new BigDecimal("30"));
-        if (total.compareTo(new BigDecimal("100")) > 0)
+        if (total.compareTo(new BigDecimal("100")) >= 0)
             return total.subtract(BigDecimal.TEN);
         return total;
     }
@@ -30,9 +30,9 @@ public class PriceCalculator {
 
         BigDecimal discounted = BigDecimal.valueOf(Math.round(total.doubleValue() * rate(level) * 100) / 100.0)
                 .setScale(2, RoundingMode.HALF_UP);
-        if (total.compareTo(new BigDecimal("200")) >= 0)
+        if (discounted.compareTo(new BigDecimal("200")) >= 0)
             return discounted.subtract(new BigDecimal("30"));
-        if (discounted.compareTo(new BigDecimal("100")) > 0)
+        if (discounted.compareTo(new BigDecimal("100")) >= 0)
             return discounted.subtract(BigDecimal.TEN);
         return discounted;
     }

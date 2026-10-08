@@ -13,7 +13,7 @@ public class CouponService {
      */
     public boolean isUsable(Coupon c, BigDecimal amount) {
         LocalDate today = LocalDate.now();
-        if (!today.isBefore(c.getExpireDate()))
+        if (today.isAfter(c.getExpireDate()))
             return false;
         if (amount.compareTo(c.getThreshold()) < 0)
             return false;

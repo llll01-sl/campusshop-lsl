@@ -75,4 +75,46 @@ public class PriceCalculatorTests
 
         Assert.Equal(expected, result);
     }
+
+    // ---- CalculateTotal：需求第 2 节 ----
+
+    [Theory]
+    [InlineData(99.99,  MemberLevel.Normal, 99.99)]  // 边界 100 左
+    [InlineData(100,    MemberLevel.Normal, 90.00)]  // 边界 100
+    [InlineData(200,    MemberLevel.Normal, 170.00)] // 边界 200
+    [InlineData(200,    MemberLevel.Gold,   170.00)] // 交互：200 × 0.9 = 180 → 减 10
+    [InlineData(110,    MemberLevel.Silver, 94.50)]  // 交互：110 × 0.95 = 104.5 → 减 10
+    [InlineData(105,    MemberLevel.Silver, 99.75)]  // 交互：105 × 0.95 = 99.75，跌破门槛
+    public void CalculateTotal_ValidInput_ReturnsExpected(
+        double total, MemberLevel level, double expected)
+    {
+        var calc = new PriceCalculator();
+
+        var result = calc.CalculateTotal((decimal)total, level);
+
+        Assert.Equal((decimal)expected, result);
+    }
+
+    [Theory]
+    [InlineData(-0.01)]
+    [InlineData(100000.01)]
+    public void CalculateTotal_OutOfRange_Throws(double total)
+    {
+        var calc = new PriceCalculator();
+
+        var ex = Assert.Throws<ArgumentOutOfRangeException>(
+            () => calc.CalculateTotal((decimal)total, MemberLevel.Normal));
+
+        Assert.Equal("total", ex.ParamName);
+    }
+
+    [Fact]
+    public void ApplyDiscount_TotalIs100_Returns90()
+    {
+        var calc = new PriceCalculator();
+
+        var result = calc.ApplyDiscount(100m);
+
+        Assert.Equal(90m, result);
+    }
 }

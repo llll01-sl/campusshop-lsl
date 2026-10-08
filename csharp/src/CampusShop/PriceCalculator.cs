@@ -12,7 +12,7 @@ public class PriceCalculator
     {
         if (total >= 200)
             return total - 30;
-        if (total > 100)
+        if (total >= 100)
             return total - 10;
         return total;
     }
@@ -27,9 +27,9 @@ public class PriceCalculator
             throw new ArgumentOutOfRangeException(nameof(total));
 
         decimal discounted = (decimal)Math.Round((double)total * Rate(level), 2, MidpointRounding.AwayFromZero);
-        if (total >= 200)
+        if (discounted >= 200)
             return discounted - 30;
-        if (discounted > 100)
+        if (discounted >= 100)
             return discounted - 10;
         return discounted;
     }
