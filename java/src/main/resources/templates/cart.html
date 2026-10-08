@@ -27,7 +27,7 @@
     </th:block>
     <p>应付金额：<span data-testid="cart-total" th:text="'¥' + ${#numbers.formatDecimal(total, 1, 2)}">¥0.00</span></p>
     <form method="post" action="/cart">
-        <button type="submit" th:disabled="${cart.empty}">下单</button>
+        <button type="submit" th:disabled="${cart.empty}">提交订单</button>
     </form>
 </main>
 </body>
