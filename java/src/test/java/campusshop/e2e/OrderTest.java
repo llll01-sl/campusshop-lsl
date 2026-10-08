@@ -25,7 +25,7 @@ class OrderTest extends E2ETest {
         assertThat(page.getByTestId("cart-total"))
             .hasText("¥90.00");
         page.getByRole(AriaRole.BUTTON,
-            new Page.GetByRoleOptions().setName("下单")).click();
+            new Page.GetByRoleOptions().setName("提交订单")).click();
         assertThat(page.getByTestId("order-no"))
             .hasText(Pattern.compile("^CS\\d+$"));
     }
@@ -39,6 +39,6 @@ class OrderTest extends E2ETest {
         assertThat(page.getByText("购物车为空"))
             .isVisible();
         assertThat(page.getByRole(AriaRole.BUTTON,
-            new Page.GetByRoleOptions().setName("下单"))).isDisabled();
+            new Page.GetByRoleOptions().setName("提交订单"))).isDisabled();
     }
 }

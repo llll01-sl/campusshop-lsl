@@ -17,7 +17,7 @@ public class OrderTests : ShopPageTest
         await Expect(Page.GetByTestId("cart-total"))
             .ToHaveTextAsync("¥90.00");
         await Page.GetByRole(AriaRole.Button,
-            new() { Name = "下单" }).ClickAsync();
+            new() { Name = "提交订单" }).ClickAsync();
         await Expect(Page.GetByTestId("order-no"))
             .ToHaveTextAsync(new Regex(@"^CS\d+$"));
     }
@@ -32,6 +32,6 @@ public class OrderTests : ShopPageTest
         await Expect(Page.GetByText("购物车为空"))
             .ToBeVisibleAsync();
         await Expect(Page.GetByRole(AriaRole.Button,
-            new() { Name = "下单" })).ToBeDisabledAsync();
+            new() { Name = "提交订单" })).ToBeDisabledAsync();
     }
 }
