@@ -28,5 +28,5 @@ else
 }
 <p>应付金额：<span data-testid="cart-total">¥@Model.Total.ToString("0.00")</span></p>
 <form method="post">
-    <button type="submit">下单</button>
+    <button type="submit" disabled="@Model.Cart.IsEmpty">下单</button>
 </form>
