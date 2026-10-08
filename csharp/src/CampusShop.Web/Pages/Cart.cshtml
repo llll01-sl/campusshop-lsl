@@ -18,12 +18,22 @@
 }
 else
 {
-    <ul class="cart">
+    <table class="cart">
+        <thead>
+        <tr><th>商品</th><th>单价</th><th>数量</th><th>小计</th></tr>
+        </thead>
+        <tbody>
         @foreach (var item in Model.Cart.Items)
         {
-            <li>@item.Name × @item.Quantity　¥@item.Subtotal.ToString("0.00")</li>
+            <tr>
+                <td>@item.Name</td>
+                <td>¥@item.Price.ToString("0.00")</td>
+                <td>@item.Quantity</td>
+                <td>¥@item.Subtotal.ToString("0.00")</td>
+            </tr>
         }
-    </ul>
+        </tbody>
+    </table>
     <p>原价合计：¥@Model.Cart.Subtotal.ToString("0.00")</p>
 }
 <p>应付金额：<span data-testid="cart-total">¥@Model.Total.ToString("0.00")</span></p>

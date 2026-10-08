@@ -10,11 +10,19 @@
     <div class="error" data-testid="error-msg" th:if="${error}" th:text="${error}"></div>
     <p th:if="${cart.empty}">购物车为空</p>
     <th:block th:unless="${cart.empty}">
-        <ul class="cart">
-            <li th:each="item : ${cart.items}"
-                th:text="${item.name} + ' × ' + ${item.quantity} + '　¥' + ${#numbers.formatDecimal(item.subtotal, 1, 2)}">
-            </li>
-        </ul>
+        <table class="cart">
+            <thead>
+            <tr><th>商品</th><th>单价</th><th>数量</th><th>小计</th></tr>
+            </thead>
+            <tbody>
+            <tr th:each="item : ${cart.items}">
+                <td th:text="${item.name}"></td>
+                <td th:text="'¥' + ${#numbers.formatDecimal(item.price, 1, 2)}"></td>
+                <td th:text="${item.quantity}"></td>
+                <td th:text="'¥' + ${#numbers.formatDecimal(item.subtotal, 1, 2)}"></td>
+            </tr>
+            </tbody>
+        </table>
         <p th:text="'原价合计：¥' + ${#numbers.formatDecimal(cart.subtotal, 1, 2)}"></p>
     </th:block>
     <p>应付金额：<span data-testid="cart-total" th:text="'¥' + ${#numbers.formatDecimal(total, 1, 2)}">¥0.00</span></p>
