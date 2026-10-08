@@ -31,8 +31,8 @@ public class ShopStore : IInventoryRepository
             Users.AddRange(new[]
             {
                 new User("alice", "123456", "学生公寓 3 栋 402", "13800000001"),
-                new User("bob", "123456", "学生公寓 5 栋 117", "13800000002"),
-                new User("carol", "123456", "教师公寓 1 栋 201", "13800000003"),
+                new User("bob", "123456", "学生公寓 5 栋 117", "13800000002", MemberLevel.Silver),
+                new User("carol", "123456", "教师公寓 1 栋 201", "13800000003", MemberLevel.Gold),
             });
 
             Products.Clear();

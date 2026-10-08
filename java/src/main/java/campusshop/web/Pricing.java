@@ -17,6 +17,6 @@ public class Pricing {
     }
 
     public BigDecimal totalFor(User user, BigDecimal subtotal) {
-        return calc.applyDiscount(subtotal);
+        return calc.calculateTotal(subtotal, user.level());
     }
 }

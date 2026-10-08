@@ -16,4 +16,28 @@ public class PriceCalculator
             return total - 10;
         return total;
     }
+
+    /// <summary>
+    /// 计算应付金额：先按会员等级打折，再按折后金额满减。
+    /// </summary>
+    /// <exception cref="ArgumentOutOfRangeException">total 小于 0 或大于 100000。</exception>
+    public decimal CalculateTotal(decimal total, MemberLevel level)
+    {
+        if (total < 0 || total > 100000)
+            throw new ArgumentOutOfRangeException(nameof(total));
+
+        decimal discounted = (decimal)Math.Round((double)total * Rate(level), 2, MidpointRounding.AwayFromZero);
+        if (total >= 200)
+            return discounted - 30;
+        if (discounted > 100)
+            return discounted - 10;
+        return discounted;
+    }
+
+    private static double Rate(MemberLevel level) => level switch
+    {
+        MemberLevel.Silver => 0.95,
+        MemberLevel.Gold => 0.9,
+        _ => 1.0,
+    };
 }

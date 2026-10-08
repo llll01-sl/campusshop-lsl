@@ -3,7 +3,8 @@ using System.Security.Cryptography;
 namespace CampusShop;
 
 /// <summary>用户。</summary>
-public record User(string Username, string Password, string Address, string Phone);
+public record User(string Username, string Password, string Address, string Phone,
+    MemberLevel Level = MemberLevel.Normal);
 
 /// <summary>
 /// 登录与 Token 管理。Token 有效期 1 小时。

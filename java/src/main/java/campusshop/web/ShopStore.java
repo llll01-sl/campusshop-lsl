@@ -3,6 +3,7 @@ package campusshop.web;
 import campusshop.Cart;
 import campusshop.CartItem;
 import campusshop.InventoryRepository;
+import campusshop.MemberLevel;
 import campusshop.Product;
 import campusshop.User;
 import org.springframework.stereotype.Component;
@@ -36,8 +37,8 @@ public class ShopStore implements InventoryRepository {
     public synchronized void reset() {
         users.clear();
         users.add(new User("alice", "123456", "学生公寓 3 栋 402", "13800000001"));
-        users.add(new User("bob", "123456", "学生公寓 5 栋 117", "13800000002"));
-        users.add(new User("carol", "123456", "教师公寓 1 栋 201", "13800000003"));
+        users.add(new User("bob", "123456", "学生公寓 5 栋 117", "13800000002", MemberLevel.SILVER));
+        users.add(new User("carol", "123456", "教师公寓 1 栋 201", "13800000003", MemberLevel.GOLD));
 
         products.clear();
         products.add(new Product("p1", "笔记本", new BigDecimal("50.00")));
