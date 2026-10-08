@@ -32,6 +32,8 @@ public class AuthService {
      * 用户名前后的空格会被忽略。
      */
     public String login(String username, String password) {
+        if (username == null || password == null)
+            return null;
         String name = username.trim();
         User user = users.get(name);
         if (user == null || !user.password().equals(password))

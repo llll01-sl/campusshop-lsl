@@ -25,8 +25,10 @@ public class AuthService
     /// 登录。成功返回 Token，用户名或密码错误返回 null。
     /// 用户名前后的空格会被忽略。
     /// </summary>
-    public string? Login(string username, string password)
+    public string? Login(string? username, string? password)
     {
+        if (username is null || password is null)
+            return null;
         var name = username.Trim();
         if (!_users.TryGetValue(name, out var user) || user.Password != password)
             return null;

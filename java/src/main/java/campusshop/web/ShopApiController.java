@@ -58,6 +58,8 @@ public class ShopApiController {
     @Operation(summary = "登录，返回 Token")
     @PostMapping("/auth/login")
     public ResponseEntity<?> login(@RequestBody LoginRequest req) {
+        if (req.username() == null || req.username().isBlank() || req.password() == null || req.password().isEmpty())
+            return ResponseEntity.badRequest().body(new ErrorResponse("用户名和密码不能为空"));
         String token = auth.login(req.username(), req.password());
         if (token == null)
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(new ErrorResponse("用户名或密码错误"));
@@ -113,7 +115,7 @@ public class ShopApiController {
                                          @RequestHeader(value = "Authorization", required = false) String authorization) {
         User user = currentUser(authorization);
         if (user == null) return unauthorized();
-        if (req.quantity() == 0 || req.quantity() > MAX_QUANTITY)
+        if (req.quantity() <= 0 || req.quantity() > MAX_QUANTITY)
             return ResponseEntity.badRequest().body(new ErrorResponse("数量必须在 1 到 " + MAX_QUANTITY + " 之间"));
         Product product = store.findProduct(req.productId());
         if (product == null)
@@ -146,10 +148,13 @@ public class ShopApiController {
     @GetMapping("/orders/{id}")
     public ResponseEntity<?> order(@PathVariable int id,
                                    @RequestHeader(value = "Authorization", required = false) String authorization) {
-        if (currentUser(authorization) == null) return unauthorized();
+        User user = currentUser(authorization);
+        if (user == null) return unauthorized();
         OrderRecord order = store.findOrder(id);
         if (order == null)
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(new ErrorResponse("订单不存在"));
+        if (!order.user().equals(user.username()))
+            return ResponseEntity.status(HttpStatus.FORBIDDEN).body(new ErrorResponse("无权查看该订单"));
         return ResponseEntity.ok(OrderDto.of(order));
     }
 

@@ -26,6 +26,8 @@ public static class ShopApi
 
         api.MapPost("/auth/login", (LoginRequest req, AuthService auth) =>
         {
+            if (string.IsNullOrWhiteSpace(req.Username) || string.IsNullOrEmpty(req.Password))
+                return Results.BadRequest(new ErrorResponse("用户名和密码不能为空"));
             var token = auth.Login(req.Username, req.Password);
             return token is null
                 ? Results.Json(new ErrorResponse("用户名或密码错误"), statusCode: 401)
@@ -73,7 +75,7 @@ public static class ShopApi
             AuthService auth, Pricing pricing, OrderService orders) =>
         {
             if (CurrentUser(http, auth) is not { } user) return Results.Unauthorized();
-            if (req.Quantity == 0 || req.Quantity > MaxQuantity)
+            if (req.Quantity <= 0 || req.Quantity > MaxQuantity)
                 return Results.BadRequest(new ErrorResponse($"数量必须在 1 到 {MaxQuantity} 之间"));
             if (store.FindProduct(req.ProductId) is not { } product)
                 return Results.NotFound(new ErrorResponse("商品不存在"));
@@ -112,13 +114,16 @@ public static class ShopApi
 
         api.MapGet("/orders/{id:int}", (int id, HttpContext http, ShopStore store, AuthService auth) =>
         {
-            if (CurrentUser(http, auth) is null) return Results.Unauthorized();
+            if (CurrentUser(http, auth) is not { } user) return Results.Unauthorized();
             if (store.FindOrder(id) is not { } order)
                 return Results.NotFound(new ErrorResponse("订单不存在"));
+            if (order.User != user.Username)
+                return Results.Json(new ErrorResponse("无权查看该订单"), statusCode: 403);
             return Results.Ok(ToDto(order));
         })
         .WithSummary("查看订单详情")
         .Produces<OrderDto>(200)
+        .Produces<ErrorResponse>(403)
         .Produces<ErrorResponse>(404);
 
         if (app.Environment.IsDevelopment())
