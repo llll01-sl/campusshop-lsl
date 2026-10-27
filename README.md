@@ -103,3 +103,5 @@ git switch week05-start      # 切到第 5 周的起点
 - **`.\mvnw` 下载很慢**：Maven 默认从国外仓库下载。可在 `%USERPROFILE%\.m2\settings.xml` 中配置阿里云镜像（见课程资料）。
 - **端口被占用**：先关闭之前启动的网站（在其终端按 `Ctrl+C`）。
 - **`.\mvnw` 提示找不到 Java 或 `JAVA_HOME`**：安装 JDK 21 后，重新打开终端，运行 `java -version` 确认版本。
+
+CI 流水线验证：2026-10-27
